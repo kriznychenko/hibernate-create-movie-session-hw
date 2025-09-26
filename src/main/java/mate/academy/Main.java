@@ -20,11 +20,14 @@ public class Main {
         newMovie.setTitle("Fast and Furious");
         newMovie.setDescription("An action-packed movie about street racing and heists.");
         MovieService movieService = (MovieService) injector.getInstance(MovieService.class);
-        movieService.add(newMovie);
+        Movie savedMovie = movieService.add(newMovie);
 
         List<Movie> allMovies = movieService.getAll();
         System.out.println("All Movies:");
         allMovies.forEach(movie -> System.out.println(movie.getTitle()));
+
+        Movie fetchedMovie = movieService.get(savedMovie.getId());
+        System.out.println("Fetched Movie by ID: " + fetchedMovie.getTitle());
 
         System.out.println("\nTesting CinemaHallService...");
         CinemaHall cinemaHall = new CinemaHall();
@@ -32,26 +35,31 @@ public class Main {
         cinemaHall.setCapacity(200);
         CinemaHallService cinemaHallService = (CinemaHallService)
                 injector.getInstance(CinemaHallService.class);
-        cinemaHallService.add(cinemaHall);
+        CinemaHall savedCinemaHall = cinemaHallService.add(cinemaHall);
 
         List<CinemaHall> allCinemaHalls = cinemaHallService.getAll();
         System.out.println("All Cinema Halls:");
         allCinemaHalls.forEach(hall -> System.out.println(hall.getDescription()));
 
+        CinemaHall fetchedCinemaHall = cinemaHallService.get(savedCinemaHall.getId());
+        System.out.println("Fetched Cinema Hall by ID: " + fetchedCinemaHall.getDescription());
+
         System.out.println("\nTesting MovieSessionService...");
         MovieSession movieSession = new MovieSession();
-        movieSession.setMovie(newMovie);
-        movieSession.setCinemaHall(cinemaHall);
+        movieSession.setMovie(savedMovie);
+        movieSession.setCinemaHall(savedCinemaHall);
         movieSession.setShowTime(LocalDateTime.of(2025, 9, 26, 20, 0));
         MovieSessionService movieSessionService = (MovieSessionService)
                 injector.getInstance(MovieSessionService.class);
-        movieSessionService.add(movieSession);
+        MovieSession savedMovieSession = movieSessionService.add(movieSession);
 
         List<MovieSession> availableSessions = movieSessionService
-                .findAvailableSessions(newMovie.getId(),
-                        LocalDate.of(2025, 9, 26));
+                .findAvailableSessions(savedMovie.getId(), LocalDate.of(2025, 9, 26));
         System.out.println("Available Sessions for 'Fast and Furious' on 2025-09-26:");
-        availableSessions.forEach(session -> System.out.println("Session at: "
-                + session.getShowTime()));
+        availableSessions.forEach(session ->
+                System.out.println("Session at: " + session.getShowTime()));
+
+        MovieSession fetchedMovieSession = movieSessionService.get(savedMovieSession.getId());
+        System.out.println("Fetched Movie Session by ID: " + fetchedMovieSession.getShowTime());
     }
 }

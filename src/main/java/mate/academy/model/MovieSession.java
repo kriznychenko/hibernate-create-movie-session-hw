@@ -6,9 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 
@@ -18,19 +16,11 @@ public class MovieSession {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "movieSession_movie",
-            joinColumns = @JoinColumn(name = "movieSession_id"),
-            inverseJoinColumns = @JoinColumn(name = "movie_id")
-    )
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "movie_id")
     private Movie movie;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "movieSession_cinemaHall",
-            joinColumns = @JoinColumn(name = "movieSession_id"),
-            inverseJoinColumns = @JoinColumn(name = "cinemaHall_id")
-    )
+    @JoinColumn(name = "cinemaHall_id")
     private CinemaHall cinemaHall;
     private LocalDateTime showTime;
 

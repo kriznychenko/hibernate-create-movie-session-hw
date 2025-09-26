@@ -9,7 +9,7 @@ import mate.academy.model.MovieSession;
 import mate.academy.service.MovieSessionService;
 
 @Service
-public class MoviesSessionServiceImpl implements MovieSessionService {
+public class MovieSessionServiceImpl implements MovieSessionService {
     @Inject
     private MovieSessionDao movieSessionDao;
 
@@ -20,7 +20,8 @@ public class MoviesSessionServiceImpl implements MovieSessionService {
 
     @Override
     public MovieSession get(Long id) {
-        return movieSessionDao.get(id);
+        return movieSessionDao.get(id).orElseThrow(() ->
+                new RuntimeException("Movie session with id " + id + " not found"));
     }
 
     @Override
